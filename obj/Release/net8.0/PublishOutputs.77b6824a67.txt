@@ -1,0 +1,7 @@
+D:\MVCForm practice\SmartGroceryBot\SmartGroceryBot\obj\Release\net8.0\PubTmp\Out\SmartGroceryBot.exe
+D:\MVCForm practice\SmartGroceryBot\SmartGroceryBot\obj\Release\net8.0\PubTmp\Out\appsettings.Development.json
+D:\MVCForm practice\SmartGroceryBot\SmartGroceryBot\obj\Release\net8.0\PubTmp\Out\appsettings.json
+D:\MVCForm practice\SmartGroceryBot\SmartGroceryBot\obj\Release\net8.0\PubTmp\Out\SmartGroceryBot.dll
+D:\MVCForm practice\SmartGroceryBot\SmartGroceryBot\obj\Release\net8.0\PubTmp\Out\SmartGroceryBot.deps.json
+D:\MVCForm practice\SmartGroceryBot\SmartGroceryBot\obj\Release\net8.0\PubTmp\Out\SmartGroceryBot.runtimeconfig.json
+D:\MVCForm practice\SmartGroceryBot\SmartGroceryBot\obj\Release\net8.0\PubTmp\Out\SmartGroceryBot.pdb

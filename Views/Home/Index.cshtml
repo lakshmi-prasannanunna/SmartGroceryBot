@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Smart Grocery Bot";
+}
+
+<div class="container py-5">
+    <div class="text-center">
+        <h1 class="display-3 fw-bold text-success">
+            🛒 Smart Grocery Bot
+        </h1>
+
+        <p class="lead mt-4">
+            Your intelligent grocery shopping assistant powered by ASP.NET Core and AI.
+        </p>
+
+        <p class="text-muted">
+            Search products, manage your cart, receive smart recommendations,
+            and simplify your grocery shopping experience.
+        </p>
+
+        <div class="mt-5">
+            <a asp-controller="Products" asp-action="Index" class="btn btn-success btn-lg me-3">
+                Browse Products
+            </a>
+
+            <a asp-controller="Cart" asp-action="Index" class="btn btn-outline-primary btn-lg">
+                View Cart
+            </a>
+        </div>
+    </div>
+
+    <hr class="my-5" />
+
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h3>🤖 AI Recommendations</h3>
+                    <p class="text-muted">
+                        Get personalized grocery suggestions based on your shopping history.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h3>🛍️ Smart Cart</h3>
+                    <p class="text-muted">
+                        Add, update, and manage products effortlessly in your shopping cart.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h3>📦 Order Tracking</h3>
+                    <p class="text-muted">
+                        Track your orders and monitor deliveries in real time.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
