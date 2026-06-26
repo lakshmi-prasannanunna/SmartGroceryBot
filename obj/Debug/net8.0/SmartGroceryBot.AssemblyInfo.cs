@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartGroceryBot")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+08935e1b112d6ebb548207acab886c3232fb1f95")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1d3a4813084a3cf45cc46119440635ed2ab04cd2")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartGroceryBot")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartGroceryBot")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
