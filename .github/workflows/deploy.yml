@@ -13,45 +13,33 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Configure AWS
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Login to ECR
+      - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build Docker Image
         run: |
           docker build -t smartgrocerybot .
 
-      - name: Tag Image
+      - name: Tag Docker Image
         run: |
           docker tag smartgrocerybot:latest \
           915993063181.dkr.ecr.us-east-1.amazonaws.com/smartgrocerybot:latest
 
-      - name: Push Image
+      - name: Push Docker Image to ECR
         run: |
           docker push \
           915993063181.dkr.ecr.us-east-1.amazonaws.com/smartgrocerybot:latest
 
-      - name: Deploy to EC2
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          script: |
-            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 915993063181.dkr.ecr.us-east-1.amazonaws.com
-
-            docker pull 915993063181.dkr.ecr.us-east-1.amazonaws.com/smartgrocerybot:latest
-
-            docker stop smartgrocerybot || true
-            docker rm smartgrocerybot || true
-
-            docker run -d \
-              --name smartgrocerybot \
-              -p 5000:5000 \
-              915993063181.dkr.ecr.us-east-1.amazonaws.com/smartgrocerybot:latest
+      - name: Deploy to ECS Fargate
+        run: |
+          aws ecs update-service \
+            --cluster smartgrocery-cluster1 \
+            --service smartgrocery-task-service-1lzhrram \
+            --force-new-deployment
