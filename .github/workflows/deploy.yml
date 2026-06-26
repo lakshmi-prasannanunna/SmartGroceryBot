@@ -5,12 +5,20 @@ on:
     branches:
       - main
 
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: smartgrocerybot
+  ECS_SERVICE: smartgrocery-task-service-1lzhrram
+  ECS_CLUSTER: smartgrocery-cluster1
+  ECS_TASK_DEFINITION: task-definition.json
+  CONTAINER_NAME: smartgrocery-container
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Configure AWS Credentials
@@ -18,28 +26,34 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
+        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build Docker Image
+      - name: Build and Push Image
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t smartgrocerybot .
+          docker build --no-cache -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      - name: Tag Docker Image
-        run: |
-          docker tag smartgrocerybot:latest \
-          915993063181.dkr.ecr.us-east-1.amazonaws.com/smartgrocerybot:latest
+      - name: Fill in new image in task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ steps.build-image.outputs.image }}
 
-      - name: Push Docker Image to ECR
-        run: |
-          docker push \
-          915993063181.dkr.ecr.us-east-1.amazonaws.com/smartgrocerybot:latest
-
-      - name: Deploy to ECS Fargate
-        run: |
-          aws ecs update-service \
-            --cluster smartgrocery-cluster1 \
-            --service smartgrocery-task-service-1lzhrram \
-            --force-new-deployment
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
